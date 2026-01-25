@@ -1,6 +1,6 @@
 import pandas as pd
 import logging
-from database import engine
+from database import engine,engine_master, sql_query, create_database
 from models import Base
 from etl_logic import *
 
@@ -17,13 +17,17 @@ def run_pipeline():
 
         logger.info('Iniciando pipeline de ETL...')
         
+        # Crea la base de datos en caso no exista
+        logger.info('Levantando la base de datos...')
+        create_database(engine, sql_query)
+
         # Informa la eliminación de tablas existentes
         logger.info('Eliminando tablas existentes...')
-        Base.metadata.drop_all(engine)
+        Base.metadata.drop_all(engine_master)
 
         # Crea las tablas
         logger.info('Creando tablas nuevas...')
-        Base.metadata.create_all(engine)
+        Base.metadata.create_all(engine_master)
 
         # Extrae datos sin procesar
         logger.info('Extrayendo datos del archivo...')
@@ -35,7 +39,7 @@ def run_pipeline():
 
         # Carga datos en la base de datos
         logger.info('Cargando datos en la base de datos...')
-        final_retail_data.to_sql(name='sales', con=engine, if_exists='append', index=False)
+        final_retail_data.to_sql(name='sales', con=engine_master, if_exists='append', index=False)
         
         logger.info('Pipeline completado exitosamente.')
         return True
