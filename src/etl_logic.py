@@ -37,7 +37,7 @@ def transform_retail_sales_file(df: pd.DataFrame) -> pd.DataFrame:
     df['total_spent'] = df['total_spent'].fillna(df['price_per_unit']*df['quantity'])
 
     #Normaliza espacios y convierte los textos en minusculas
-    text_columns = df.select_dtypes(include=['object']).columns
+    text_columns = df.select_dtypes(include=['str']).columns
     df[text_columns] = df[text_columns].apply(lambda x: x.str.strip().str.lower())
-
+    
     return df
