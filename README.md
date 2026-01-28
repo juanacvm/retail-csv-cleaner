@@ -65,8 +65,6 @@ retail-csv-cleaner/
 └── README.md                           # Este archivo
 ```
 
-
-
 ## Prerequisitos
 
 - Python 3.11 o superior
